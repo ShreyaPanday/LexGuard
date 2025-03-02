@@ -50,6 +50,8 @@ const Home = ({ navigation }) => {
       }
     } catch (err) {
       Alert.alert("Error", err);
+    } finally {
+      setLoader(false);
     }
   };
   return loader ? (
