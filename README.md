@@ -2,12 +2,16 @@
 
 # To run the program: 
 go to front-end: run npm install
+
 go to backend: run npm install
+
 go to backend - node register.js on port 5001
+
               - node alert.js on port 5002
 
 
 start using the UI. 
+
 
 ## Overview
 
