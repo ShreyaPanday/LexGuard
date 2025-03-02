@@ -45,6 +45,7 @@ Explored Midnight
 ![Blank ERD and data flow](https://github.com/user-attachments/assets/a445f9d9-54ef-4ae5-90d9-ad89f0b50e1c)
 
 ## UI
-![Uploading UIs.png…]()
+<img width="1636" alt="UIs" src="https://github.com/user-attachments/assets/5a1a37d1-a09b-4120-8a07-bacba6310e96" />
+
 
 
