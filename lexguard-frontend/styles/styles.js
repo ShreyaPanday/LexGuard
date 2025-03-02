@@ -33,19 +33,36 @@ export const styles = StyleSheet.create({
     textAlign: "left",
     flexWrap: "wrap",
   },
+  user: {
+    color: "#333333",
+    backgroundColor: "#CCCCFF",
+    fontWeight: "bold",
+    padding: 10,
+    marginBottom: 10,
+    width: "75%",
+    alignSelf: "flex-start",
+  },
+  gemini: {
+    color: "#333333",
+    backgroundColor: "#E6E6FA",
+    padding: 10,
+    marginBottom: 10,
+    width: "90%",
+    alignSelf: "flex-end",
+  },
 });
 
 export const landingPageStyles = StyleSheet.create({
   pageStyle: {
+    marginLeft: 5,
     backgroundColor: "#FAF9F6",
     flex: 1,
     alignItems: "center",
     justifyContent: "flex-start",
-    overflow: "visible",
   },
   header: {
-    width: "100%",
-    height: 80,
+    width: 450,
+    height: 75,
     backgroundColor: "#4B0082",
     justifyContent: "center",
     alignItems: "center",

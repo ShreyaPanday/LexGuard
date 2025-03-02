@@ -6,6 +6,7 @@ import { ScrollView } from "react-native";
 import StyledButton from "./styledButton";
 import { buttonStyles } from "../styles/styles";
 import { setUser, logout } from "../redux/userSlice";
+import BufferingLoader from "./loader";
 
 const OptionTile = ({ title, onPress, styles, icon }) => {
   return (
@@ -20,7 +21,7 @@ const Home = ({ navigation }) => {
   const options = [
     { title: "Talk to AI-Expert", navigate: "Chat" },
     { title: "Setup Lifelines", navigate: "UpdateDetails" },
-    { title: "Your Help Journey", navigate: "GetStarted" },
+    { title: "Your Help Journey", navigate: "History" },
   ];
 
   const handleLogout = () => {
@@ -51,7 +52,9 @@ const Home = ({ navigation }) => {
       Alert.alert("Error", err);
     }
   };
-  return (
+  return loader ? (
+    <BufferingLoader />
+  ) : (
     <SafeAreaView>
       <Header navigation={navigation} />
       {isLoggedIn ? (

@@ -4,10 +4,16 @@ import { landingPageStyles } from "../styles/styles";
 const Header = ({ navigation }) => {
   return (
     <TouchableOpacity
-      style={landingPageStyles.header}
+      style={{ ...landingPageStyles.header }}
       onPress={() => navigation.navigate("GetStarted")}
     >
-      <Text style={landingPageStyles.headerText}>LexGuard</Text>
+      <Text
+        style={{
+          ...landingPageStyles.headerText,
+        }}
+      >
+        LexGuard
+      </Text>
     </TouchableOpacity>
   );
 };

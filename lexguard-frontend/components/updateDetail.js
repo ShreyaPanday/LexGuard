@@ -12,7 +12,7 @@ import { landingPageStyles, buttonStyles } from "../styles/styles";
 import StyledButton from "./styledButton";
 import Header from "./header";
 
-const UpdateDetail = ({ naviagtion }) => {
+const UpdateDetail = ({ navigation }) => {
   const { email, isLoggedIn } = useSelector((state) => state.user);
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
@@ -58,7 +58,7 @@ const UpdateDetail = ({ naviagtion }) => {
     <SafeAreaView style={landingPageStyles.pageStyle}>
       {isLoggedIn ? (
         <>
-          <Header navigation={naviagtion} />
+          <Header navigation={navigation} />
           <View
             style={{ ...landingPageStyles.formContainer, marginTop: "20%" }}
           >

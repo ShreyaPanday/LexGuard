@@ -8,6 +8,7 @@ import store from "./redux/store";
 import Home from "./components/home";
 import UpdateDetail from "./components/updateDetail";
 import Chat from "./components/chat";
+import ChatHistory from "./components/history";
 
 const Stack = createStackNavigator();
 
@@ -45,6 +46,11 @@ export default function App() {
             options={{ headerShown: false }}
             name="Chat"
             component={Chat}
+          />
+          <Stack.Screen
+            options={{ headerShown: false }}
+            name="History"
+            component={ChatHistory}
           />
         </Stack.Navigator>
       </NavigationContainer>
