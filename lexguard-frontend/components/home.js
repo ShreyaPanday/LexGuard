@@ -17,13 +17,17 @@ const Home = ({ navigation }) => {
   const dispatch = useDispatch();
   const { email, isLoggedIn } = useSelector((state) => state.user);
   const options = [
-    { title: "Talk to AI-Expert", navigate: "GetStarted" },
+    { title: "Talk to AI-Expert", navigate: "Chat" },
     { title: "Setup Lifelines", navigate: "UpdateDetails" },
     { title: "Your Help Journey", navigate: "GetStarted" },
   ];
 
   const handleLogout = () => {
     dispatch(logout());
+  };
+
+  const handleSOS = () => {
+    console.log("Call SOS endpoint!");
   };
   return (
     <SafeAreaView>
@@ -54,6 +58,15 @@ const Home = ({ navigation }) => {
               onPress={() => navigation.navigate(option.navigate)}
             />
           ))}
+          <StyledButton
+            title="SOS"
+            styles={{
+              ...buttonStyles.button,
+              backgroundColor: "red",
+              color: "white",
+            }}
+            onClick={handleSOS}
+          />
         </ScrollView>
       ) : (
         <StyledButton

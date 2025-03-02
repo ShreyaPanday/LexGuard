@@ -7,6 +7,32 @@ export const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+  userChat: {
+    position: "relative",
+    padding: 10,
+    borderRadius: 10,
+    marginLeft: "20%",
+    width: "75%",
+    height: "auto",
+    backgroundColor: "#D3D3D3",
+    color: "Black",
+    fontSize: 18,
+    textAlign: "right",
+  },
+  geminiChat: {
+    position: "relative",
+    padding: 10,
+    borderRadius: 10,
+    marginRight: "20%",
+    marginVertical: 10,
+    width: "75%",
+    height: "auto",
+    backgroundColor: "#D3D3D3",
+    color: "Black",
+    fontSize: 18,
+    textAlign: "left",
+    flexWrap: "wrap",
+  },
 });
 
 export const landingPageStyles = StyleSheet.create({
