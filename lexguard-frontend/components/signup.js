@@ -20,7 +20,8 @@ const SignUp = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const handleSignUp = () => {
+  const [loader, setLoader] = useState(false);
+  const handleSignUp = async () => {
     if (
       !email ||
       !password ||
@@ -33,8 +34,43 @@ const SignUp = ({ navigation }) => {
       Alert.alert("Error", "Please fill in all the fields!");
       return;
     }
+    if (password !== confirmPassword) {
+      Alert.alert("Error", "Passwords do not match!");
+      return;
+    }
 
-    navigation.navigate("Home");
+    try {
+      setLoader(true);
+      const response = await fetch("http://10.117.17.193:5001/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name,
+          age,
+          phone,
+          gender,
+          email,
+          password,
+          confirmPassword,
+        }),
+      });
+
+      const data = await response.json();
+      console.log("Response from API:", data);
+      setLoader(false);
+
+      if (response.ok) {
+        Alert.alert("Success", "Signup Successful!");
+      } else {
+        Alert.alert("Signup Failed", data.message || "Something went wrong.");
+      }
+    } catch (error) {
+      console.error("Signup error:", error);
+      Alert.alert("Error", "Failed to connect to the server.");
+    }
+    navigation.navigate("Login");
   };
   return (
     <SafeAreaView style={landingPageStyles.pageStyle}>

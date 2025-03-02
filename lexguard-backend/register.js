@@ -10,12 +10,14 @@ app.use(express.json()); // To parse JSON request body
 app.use(cors()); // To allow requests from React Native frontend
 
 // MongoDB Connection
-mongoose.connect(process.env.MONGO_URI, {
-  dbName: "lexguard",
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-}).then(() => console.log("Connected to MongoDB Atlas"))
-  .catch(err => console.error("MongoDB Connection Error:", err));
+mongoose
+  .connect(process.env.MONGO_URI, {
+    dbName: "lexguard",
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => console.log("Connected to MongoDB Atlas"))
+  .catch((err) => console.error("MongoDB Connection Error:", err));
 
 // Define User Schema
 const userSchema = new mongoose.Schema({
@@ -24,7 +26,7 @@ const userSchema = new mongoose.Schema({
   phone: { type: String, required: true, unique: true },
   gender: { type: String, required: true },
   email: { type: String, required: true, unique: true },
-  password: { type: String, required: true }
+  password: { type: String, required: true },
 });
 
 const User = mongoose.model("user", userSchema, "user"); // Explicitly defining collection name "user"
@@ -34,27 +36,40 @@ const contactSchema = new mongoose.Schema({
   userId: { type: mongoose.Schema.Types.ObjectId, ref: "user", required: true }, // References User
   name: { type: String, required: true },
   phone: { type: String, required: true },
-  email: { type: String, required: true }
+  email: { type: String, required: true },
 });
 
-const Contact = mongoose.model("contactInformation", contactSchema, "contactInformation");
+const Contact = mongoose.model(
+  "contactInformation",
+  contactSchema,
+  "contactInformation"
+);
 
 const historySchema = new mongoose.Schema({
-    userId: { type: mongoose.Schema.Types.ObjectId, ref: "user", required: true },
-    request: { type: String, required: true },
-    response: { type: String, required: true },
-    timestamp: { type: Date, default: Date.now }
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: "user", required: true },
+  request: { type: String, required: true },
+  response: { type: String, required: true },
+  timestamp: { type: Date, default: Date.now },
 });
-  
+
 const History = mongoose.model("history", historySchema, "history");
 
 // ✅ POST Route for User Registration
 app.post("/register", async (req, res) => {
   try {
-    const { name, age, phone, gender, email, password, confirmPassword } = req.body;
+    const { name, age, phone, gender, email, password, confirmPassword } =
+      req.body;
 
     // Validate Inputs
-    if (!name || !age || !phone || !gender || !email || !password || !confirmPassword) {
+    if (
+      !name ||
+      !age ||
+      !phone ||
+      !gender ||
+      !email ||
+      !password ||
+      !confirmPassword
+    ) {
       return res.status(400).json({ message: "All fields are required!" });
     }
 
@@ -71,7 +86,14 @@ app.post("/register", async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, salt);
 
     // Save User in "lexguard.user"
-    const newUser = new User({ name, age, phone, gender, email, password: hashedPassword });
+    const newUser = new User({
+      name,
+      age,
+      phone,
+      gender,
+      email,
+      password: hashedPassword,
+    });
     await newUser.save();
 
     res.status(201).json({ message: "User registered successfully!" });
@@ -126,7 +148,12 @@ app.post("/addEmergencyContact", async (req, res) => {
     }
 
     // Save Contact Information
-    const newContact = new Contact({ userId: user._id, name, phone, email: contactEmail });
+    const newContact = new Contact({
+      userId: user._id,
+      name,
+      phone,
+      email: contactEmail,
+    });
     await newContact.save();
 
     res.status(201).json({ message: "Emergency contact added successfully!" });
@@ -137,41 +164,46 @@ app.post("/addEmergencyContact", async (req, res) => {
 });
 
 app.post("/getLegalAdvice", async (req, res) => {
-    try {
-      const { email, userQuery } = req.body;
-  
-      // Validate Inputs
-      if (!email || !userQuery) {
-        return res.status(400).json({ message: "Email and userQuery are required!" });
-      }
-  
-      // Find user by email
-      const user = await User.findOne({ email });
-      if (!user) {
-        return res.status(404).json({ message: "User not found!" });
-      }
-  
-      // Generate Legal Advice using Gemini AI
-      const generatedText = await askGemini(userQuery);
-  
-      // Save the request and response in MongoDB (History)
-      const newHistory = new History({
-        userId: user._id,
-        request: userQuery,
-        response: generatedText
-      });
-  
-      await newHistory.save();
-  
-      // Return AI-generated legal advice
-      res.status(200).json({ message: "Legal advice retrieved successfully!", legalAdvice: generatedText });
-    } catch (error) {
-      console.error("Error generating legal advice:", error);
-      res.status(500).json({ message: "Server error" });
+  try {
+    const { email, userQuery } = req.body;
+
+    // Validate Inputs
+    if (!email || !userQuery) {
+      return res
+        .status(400)
+        .json({ message: "Email and userQuery are required!" });
     }
-  });
 
+    // Find user by email
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ message: "User not found!" });
+    }
 
+    // Generate Legal Advice using Gemini AI
+    const generatedText = await askGemini(userQuery);
+
+    // Save the request and response in MongoDB (History)
+    const newHistory = new History({
+      userId: user._id,
+      request: userQuery,
+      response: generatedText,
+    });
+
+    await newHistory.save();
+
+    // Return AI-generated legal advice
+    res
+      .status(200)
+      .json({
+        message: "Legal advice retrieved successfully!",
+        legalAdvice: generatedText,
+      });
+  } catch (error) {
+    console.error("Error generating legal advice:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
 
 // ✅ GET Route to Fetch Emergency Contacts for a User
 app.get("/getEmergencyContacts", async (req, res) => {
@@ -192,7 +224,6 @@ app.get("/getEmergencyContacts", async (req, res) => {
 
     // Find Emergency Contacts
     const contacts = await Contact.find({ userId: user._id });
-    
 
     res.status(200).json({ contacts });
   } catch (error) {
@@ -201,33 +232,35 @@ app.get("/getEmergencyContacts", async (req, res) => {
   }
 });
 
-
 // ✅ GET Route to Fetch Legal Advice History for a User
 app.get("/getLegalAdviceHistory", async (req, res) => {
-    try {
-      const email = req.query.email?.trim();
-      // Validate input
-      if (!email) {
-        return res.status(400).json({ message: "Email is required!" });
-      }
-  
-      // Find user by email
-      const user = await User.findOne({ email });
-      if (!user) {
-        return res.status(404).json({ message: "User not found!" });
-      }
-  
-      // Fetch history records for the user
-      const historyRecords = await History.find({ userId: user._id }).sort({ timestamp: -1 });
-  
-      res.status(200).json({ history: historyRecords });
-    } catch (error) {
-      console.error("Error fetching legal advice history:", error);
-      res.status(500).json({ message: "Server error" });
+  try {
+    const email = req.query.email?.trim();
+    // Validate input
+    if (!email) {
+      return res.status(400).json({ message: "Email is required!" });
     }
+
+    // Find user by email
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ message: "User not found!" });
+    }
+
+    // Fetch history records for the user
+    const historyRecords = await History.find({ userId: user._id }).sort({
+      timestamp: -1,
+    });
+
+    res.status(200).json({ history: historyRecords });
+  } catch (error) {
+    console.error("Error fetching legal advice history:", error);
+    res.status(500).json({ message: "Server error" });
+  }
 });
-  
 
 // Start the Server
 const PORT = process.env.PORT || 5001;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(PORT, "0.0.0.0", () =>
+  console.log(`Server running on port ${PORT}`)
+);
