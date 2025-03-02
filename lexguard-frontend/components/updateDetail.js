@@ -38,10 +38,13 @@ const UpdateDetail = ({ naviagtion }) => {
         }
       );
 
-      const data = await response.json();
       if (response.ok) {
         Alert.alert("Success", "Emergency Contact Added Successfully!");
         setLoader(false);
+        setContactEmail("");
+        setPhone("");
+        setName("");
+        naviagtion.navigate("Dashboard");
       } else {
         Alert.alert("Error", "Could not update Emergency Contact");
       }
@@ -55,7 +58,7 @@ const UpdateDetail = ({ naviagtion }) => {
     <SafeAreaView style={landingPageStyles.pageStyle}>
       {isLoggedIn ? (
         <>
-          <Header naviagtion={naviagtion} />
+          <Header navigation={naviagtion} />
           <View
             style={{ ...landingPageStyles.formContainer, marginTop: "20%" }}
           >
