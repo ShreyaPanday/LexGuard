@@ -5,7 +5,7 @@ import {
   Text,
   TextInput,
   Keyboard,
-  Button,
+  Alert,
 } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import { landingPageStyles, buttonStyles } from "../styles/styles";
@@ -13,19 +13,43 @@ import StyledButton from "./styledButton";
 import Header from "./header";
 
 const UpdateDetail = ({ naviagtion }) => {
-  const dispatch = useDispatch();
   const { email, isLoggedIn } = useSelector((state) => state.user);
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [contactEmail, setContactEmail] = useState("");
+  const [loader, setLoader] = useState(false);
 
-  const handleSubmitDetails = () => {
-    console.log({
-      email: email,
-      name: name,
-      phone: phone,
-      contactEmail: contactEmail,
-    });
+  const handleSubmitDetails = async () => {
+    setLoader(true);
+    try {
+      const response = await fetch(
+        "http://10.117.17.193:5001/addEmergencyContact",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email,
+            name,
+            phone,
+            contactEmail,
+          }),
+        }
+      );
+
+      const data = await response.json();
+      if (response.ok) {
+        Alert.alert("Success", "Emergency Contact Added Successfully!");
+        setLoader(false);
+      } else {
+        Alert.alert("Error", "Could not update Emergency Contact");
+      }
+    } catch (err) {
+      Alert.alert("Error", err.message);
+    } finally {
+      setLoader(false);
+    }
   };
   return (
     <SafeAreaView style={landingPageStyles.pageStyle}>
