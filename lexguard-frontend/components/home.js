@@ -1,5 +1,5 @@
-import React from "react";
-import { Button, SafeAreaView, Text, View } from "react-native";
+import React, { useState } from "react";
+import { Alert, Button, SafeAreaView, Text, View } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import Header from "./header";
 import { ScrollView } from "react-native";
@@ -16,6 +16,7 @@ const OptionTile = ({ title, onPress, styles, icon }) => {
 const Home = ({ navigation }) => {
   const dispatch = useDispatch();
   const { email, isLoggedIn } = useSelector((state) => state.user);
+  const [loader, setLoader] = useState(false);
   const options = [
     { title: "Talk to AI-Expert", navigate: "Chat" },
     { title: "Setup Lifelines", navigate: "UpdateDetails" },
@@ -26,8 +27,29 @@ const Home = ({ navigation }) => {
     dispatch(logout());
   };
 
-  const handleSOS = () => {
-    console.log("Call SOS endpoint!");
+  const handleSOS = async () => {
+    setLoader(true);
+    try {
+      const response = await fetch("http://10.117.17.193:5002/sendAlert", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email,
+        }),
+      });
+      const data = await response.json();
+      if (response.ok) {
+        Alert.alert(
+          "Alert has been sent! Please find a safe shelter in the meanwhile."
+        );
+      } else {
+        Alert.alert("Error", "Something went wrong!");
+      }
+    } catch (err) {
+      Alert.alert("Error", err);
+    }
   };
   return (
     <SafeAreaView>

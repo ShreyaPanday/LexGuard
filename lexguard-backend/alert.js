@@ -10,15 +10,20 @@ app.use(express.json()); // To parse JSON request body
 app.use(cors()); // To allow requests from React Native frontend
 
 // MongoDB Connection
-mongoose.connect(process.env.MONGO_URI, {
-  dbName: "lexguard",
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-}).then(() => console.log("Connected to MongoDB Atlas"))
-  .catch(err => console.error("MongoDB Connection Error:", err));
+mongoose
+  .connect(process.env.MONGO_URI, {
+    dbName: "lexguard",
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => console.log("Connected to MongoDB Atlas"))
+  .catch((err) => console.error("MongoDB Connection Error:", err));
 
 // Twilio Credentials (From `.env`)
-const twilioClient = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
+const twilioClient = twilio(
+  process.env.TWILIO_ACCOUNT_SID,
+  process.env.TWILIO_AUTH_TOKEN
+);
 const TWILIO_WHATSAPP_NUMBER = "whatsapp:" + process.env.TWILIO_WHATSAPP_NUMBER;
 
 // Define User Schema
@@ -28,7 +33,7 @@ const userSchema = new mongoose.Schema({
   phone: { type: String, required: true, unique: true },
   gender: { type: String, required: true },
   email: { type: String, required: true, unique: true },
-  password: { type: String, required: true }
+  password: { type: String, required: true },
 });
 
 const User = mongoose.model("user", userSchema, "user");
@@ -38,10 +43,14 @@ const contactSchema = new mongoose.Schema({
   userId: { type: mongoose.Schema.Types.ObjectId, ref: "user", required: true }, // References User
   name: { type: String, required: true },
   phone: { type: String, required: true },
-  email: { type: String, required: true }
+  email: { type: String, required: true },
 });
 
-const Contact = mongoose.model("contactInformation", contactSchema, "contactInformation");
+const Contact = mongoose.model(
+  "contactInformation",
+  contactSchema,
+  "contactInformation"
+);
 
 // ✅ POST Route to Send WhatsApp Alert
 app.post("/sendAlert", async (req, res) => {
@@ -76,7 +85,7 @@ app.post("/sendAlert", async (req, res) => {
       await twilioClient.messages.create({
         from: TWILIO_WHATSAPP_NUMBER,
         to: toWhatsAppNumber,
-        body: message
+        body: message,
       });
     }
 
@@ -88,5 +97,7 @@ app.post("/sendAlert", async (req, res) => {
 });
 
 // Start the Server
-const PORT = process.env.PORT || 5001;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+const PORT = process.env.PORT || 5002;
+app.listen(PORT, "0.0.0.0", () =>
+  console.log(`Server running on port ${PORT}`)
+);
