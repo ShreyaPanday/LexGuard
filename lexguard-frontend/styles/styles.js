@@ -15,6 +15,7 @@ export const landingPageStyles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "flex-start",
+    overflow: "visible",
   },
   header: {
     width: "100%",

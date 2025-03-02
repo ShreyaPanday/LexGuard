@@ -9,8 +9,8 @@ import {
   Button,
 } from "react-native";
 import { landingPageStyles, buttonStyles } from "../styles/styles";
-import { TouchableOpacity } from "react-native";
 import StyledButton from "./styledButton";
+import Header from "./header";
 
 const SignUp = ({ navigation }) => {
   const [name, setName] = useState("");
@@ -38,12 +38,17 @@ const SignUp = ({ navigation }) => {
   };
   return (
     <SafeAreaView style={landingPageStyles.pageStyle}>
-      <View style={landingPageStyles.header}>
-        <Text style={{ ...landingPageStyles.headerText, paddingHorizontal: 0 }}>
+      <Header navigation={navigation} />
+      <View style={landingPageStyles.formContainer}>
+        <Text
+          style={{
+            ...landingPageStyles.headerText,
+            marginBottom: 25,
+            color: "#4B0082",
+          }}
+        >
           SignUp
         </Text>
-      </View>
-      <View style={landingPageStyles.formContainer}>
         {/* Name */}
         <TextInput
           style={landingPageStyles.input}
@@ -115,6 +120,10 @@ const SignUp = ({ navigation }) => {
           styles={buttonStyles.button}
           title="Sign Up"
           onClick={handleSignUp}
+        />
+        <Button
+          title="Skip to Login"
+          onPress={() => navigation.navigate("Login")}
         />
       </View>
     </SafeAreaView>

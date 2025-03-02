@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, View, StyleSheet } from "react-native";
+import { Text, View, Button } from "react-native";
 import StyledButton from "./styledButton";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
@@ -8,21 +8,22 @@ import {
   textStyles,
   buttonStyles,
 } from "../styles/styles";
+import { useSelector } from "react-redux";
+import Header from "./header";
 
 const LandingPage = ({ navigation }) => {
+  const { email, isLoggedIn } = useSelector((state) => state.user);
   return (
     <SafeAreaView style={styles.container}>
       <View style={landingPageStyles.pageStyle}>
-        <View style={landingPageStyles.header}>
-          <Text style={landingPageStyles.headerText}>LexGuard</Text>
-        </View>
+        <Header navigation={navigation} />
         <View style={landingPageStyles.content}>
-          <Text style={textStyles.h1}>Welcome to LexGuard</Text>
+          <Text style={textStyles.h2}>
+            Welcome {isLoggedIn ? email : "Guest"},
+          </Text>
           <Text style={textStyles.p}>
             Your Personal Legal Assistant Powered by GeminiAI
           </Text>
-        </View>
-        <View style={landingPageStyles.content}>
           <Text style={textStyles.h2}>
             Get Reliable Legal Advice at Your Fingertips
           </Text>
@@ -32,18 +33,34 @@ const LandingPage = ({ navigation }) => {
             GeminiAI, our intelligent platform provides fast, reliable, and
             tailored legal consultations to help you make informed decisions.
           </Text>
-        </View>
-        <View style={landingPageStyles.content}>
           <Text style={textStyles.h2}>Ready to Get Legal Help?</Text>
           <Text style={textStyles.p}>
             Start using LexGuard today for fast, secure, and tailored legal
             advice anytime, anywhere.
           </Text>
-          <StyledButton
-            styles={buttonStyles.button}
-            title="Get Started"
-            onClick={() => navigation.navigate("Signup")}
-          />
+          {!isLoggedIn ? (
+            <>
+              <StyledButton
+                styles={buttonStyles.button}
+                title="Get Started"
+                onClick={() => navigation.navigate("Signup")}
+              />
+              <Button
+                title="Skip to Sign Up"
+                onPress={() => navigation.navigate("Signup")}
+              />
+              <Button
+                title="Skip to Login"
+                onPress={() => navigation.navigate("Signup")}
+              />
+            </>
+          ) : (
+            <StyledButton
+              styles={buttonStyles.button}
+              title="Go to Dashboard"
+              onClick={() => navigation.navigate("Dashboard")}
+            />
+          )}
         </View>
       </View>
     </SafeAreaView>
