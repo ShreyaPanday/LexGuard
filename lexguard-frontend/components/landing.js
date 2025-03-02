@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, View, Button } from "react-native";
+import { Text, View, Button, ScrollView } from "react-native";
 import StyledButton from "./styledButton";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
@@ -17,7 +17,7 @@ const LandingPage = ({ navigation }) => {
     <SafeAreaView style={styles.container}>
       <View style={landingPageStyles.pageStyle}>
         <Header navigation={navigation} />
-        <View style={landingPageStyles.content}>
+        <ScrollView style={landingPageStyles.content}>
           <Text style={textStyles.h2}>
             Welcome {isLoggedIn ? email : "Guest"},
           </Text>
@@ -46,12 +46,8 @@ const LandingPage = ({ navigation }) => {
                 onClick={() => navigation.navigate("Signup")}
               />
               <Button
-                title="Skip to Sign Up"
-                onPress={() => navigation.navigate("Signup")}
-              />
-              <Button
                 title="Skip to Login"
-                onPress={() => navigation.navigate("Signup")}
+                onPress={() => navigation.navigate("Login")}
               />
             </>
           ) : (
@@ -61,7 +57,7 @@ const LandingPage = ({ navigation }) => {
               onClick={() => navigation.navigate("Dashboard")}
             />
           )}
-        </View>
+        </ScrollView>
       </View>
     </SafeAreaView>
   );
