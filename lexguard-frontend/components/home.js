@@ -31,7 +31,7 @@ const Home = ({ navigation }) => {
   const handleSOS = async () => {
     setLoader(true);
     try {
-      const response = await fetch("http://10.117.17.193:5002/sendAlert", {
+      const response = await fetch("http://10.117.17.193:5001/sendAlert", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
