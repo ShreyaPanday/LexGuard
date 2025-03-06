@@ -1,4 +1,4 @@
-# LexGuard - An AI powered legal protection for Women and Gender Minorities
+# LexGuard - An AI powered legal advisor for Women and Gender Minorities
 
 # To run the program: 
 go to front-end: run npm install
